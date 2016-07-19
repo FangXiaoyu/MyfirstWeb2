@@ -7,6 +7,7 @@ from flask_wtf import Form
 from wtforms import StringField, SubmitField
 from wtforms.validators import Required
 from flask_sqlalchemy import SQLAlchemy
+from flask_script import Shell
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -46,6 +47,9 @@ class NameForm(Form):
     name = StringField('What is your name?', validators=[Required()])
     submit = SubmitField('Submit')
 
+def make_shell_context():
+	return dict(app = app,db = db,User = User,Role = Role)
+manager.add_command("shell",Shell(make_context = make_shell_context))
 
 @app.errorhandler(404)
 def page_not_found(e):
